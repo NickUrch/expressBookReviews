@@ -84,18 +84,16 @@ regd_users.delete("/auth/review/:isbn", (req, res) => {
         const book = books[req_isbn];
 
         if (book) {
-
+            delete book.reviews[username];
+            res.status(200).json({message: "Review deleted"});
         } else {
-            
+            res.status(404).json({message: "Review not found"});
         }
 
     } catch (error) {
         console.log(error);
         res.status(501).json({ message: "Error deleting review"});
     }
-
-
-
 });
 
 
