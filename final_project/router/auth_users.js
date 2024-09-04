@@ -50,27 +50,55 @@ regd_users.post("/login", (req,res) => {
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
     try {
-        const requestedIsbn = req.params.isbn;
-        const reviewText = req.query.review;
-        const username = req.session.authorization.username; // Assuming username is stored in the session
+        const req_isbn = req.params.isbn;
+        const new_review = req.query.review;
+        const username = req.session.authorization.username; 
     
         if (!username) {
-          return res.status(401).json({ message: "Unauthorized" }); // Handle unauthorized access
+          return res.status(401).json({ message: "Unauthorized" }); 
         }
     
-        const book = books[requestedIsbn];
+        const book = books[req_isbn];
     
         if (book) {
-          book.reviews[username] = reviewText; // Add or modify review based on username
+          book.reviews[username] = new_review; 
           res.json({ message: "Review added/modified successfully" });
         } else {
-          res.status(404).json({ message: "Book not found" }); // Handle book not found
+          res.status(404).json({ message: "Book not found" }); 
         }
       } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Error adding/modifying review" }); // Handle unexpected errors
+        res.status(500).json({ message: "Error adding/modifying review" }); 
       }
 });
+
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+    try {
+        const req_isbn = req.params.isbn;
+        const username = req.session.authorization.username;
+
+        if (!username) {
+            res.status(401).json({ message: "Unauthorized user"});
+        }
+
+        const book = books[req_isbn];
+
+        if (book) {
+
+        } else {
+            
+        }
+
+    } catch (error) {
+        console.log(error);
+        res.status(501).json({ message: "Error deleting review"});
+    }
+
+
+
+});
+
+
 
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
